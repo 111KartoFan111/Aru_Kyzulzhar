@@ -99,9 +99,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       return true;
     } catch (error: any) {
       console.error('Login failed:', error);
-      message.error(
-        error.response?.data?.detail || 'Ошибка входа. Проверьте email и пароль.'
-      );
+      const errorMessage = error.response?.data?.detail || 'Ошибка входа. Проверьте email и пароль.';
+      message.error(errorMessage);
       return false;
     } finally {
       setLoading(false);

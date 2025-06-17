@@ -1,7 +1,7 @@
 // frontend/src/services/api.ts
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 // Create axios instances
 export const authAPI = axios.create({
@@ -32,6 +32,35 @@ const addAuthToken = (config: any) => {
 contractsAPI.interceptors.request.use(addAuthToken);
 documentsAPI.interceptors.request.use(addAuthToken);
 notificationsAPI.interceptors.request.use(addAuthToken);
+
+// Response interceptor to handle 401 errors
+const handle401 = (error: any) => {
+  if (error.response?.status === 401) {
+    localStorage.removeItem('token');
+    window.location.href = '/login';
+  }
+  return Promise.reject(error);
+};
+
+authAPI.interceptors.response.use(
+  (response) => response,
+  handle401
+);
+
+contractsAPI.interceptors.response.use(
+  (response) => response,
+  handle401
+);
+
+documentsAPI.interceptors.response.use(
+  (response) => response,
+  handle401
+);
+
+notificationsAPI.interceptors.response.use(
+  (response) => response,
+  handle401
+);
 
 // Types
 export interface Contract {
@@ -74,7 +103,7 @@ export interface Document {
   file_size?: number;
   contract_id?: number;
   uploaded_by: number;
-  tags: string[];
+  tags?: string[];
   expiry_date?: string;
   created_at: string;
   updated_at: string;

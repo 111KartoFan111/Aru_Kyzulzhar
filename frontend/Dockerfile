@@ -6,7 +6,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci --only=production
+RUN npm ci
 
 # Copy source code
 COPY . .
@@ -14,7 +14,10 @@ COPY . .
 # Build the app
 RUN npm run build
 
+# Install serve for production
+RUN npm install -g serve
+
 EXPOSE 3000
 
 # Start the application
-CMD ["npm", "start"]
+CMD ["serve", "-s", "dist", "-l", "3000"]
