@@ -8,10 +8,42 @@
       name="description"
       content="Система управления документооборотом Кызыл Жар"
     />
+    <!-- Отключаем CSP для development -->
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval' 'unsafe-inline'; object-src 'none';">
     <title>Кызыл Жар - Управление документооборотом</title>
   </head>
   <body>
     <noscript>Для работы приложения необходимо включить JavaScript.</noscript>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Временный индикатор загрузки -->
+      <div id="loading" style="
+        display: flex; 
+        justify-content: center; 
+        align-items: center; 
+        height: 100vh; 
+        font-family: Arial, sans-serif;
+        background: #f0f2f5;
+      ">
+        <div style="text-align: center;">
+          <div style="
+            width: 40px; 
+            height: 40px; 
+            border: 4px solid #f3f3f3; 
+            border-top: 4px solid #1890ff; 
+            border-radius: 50%; 
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+          "></div>
+          <p style="color: #666; margin: 0;">Загрузка приложения...</p>
+        </div>
+      </div>
+      <style>
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      </style>
+    </div>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

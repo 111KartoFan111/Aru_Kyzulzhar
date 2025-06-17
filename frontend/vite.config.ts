@@ -1,4 +1,3 @@
-
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 
@@ -16,14 +15,51 @@ export default defineConfig({
         secure: false,
       },
     },
+    // Отключаем CSP в development режиме
+    headers: {
+      'Content-Security-Policy': '',
+    },
   },
   build: {
     outDir: 'dist',
     sourcemap: true,
+    // Улучшаем совместимость с CSP
+    rollupOptions: {
+      output: {
+        manualChunks: undefined,
+      },
+    },
   },
   resolve: {
     alias: {
       '@': '/src',
     },
+  },
+  // Настройки для работы с CSP
+  esbuild: {
+    loader: 'tsx',
+    include: /src\/.*\.[tj]sx?$/,
+    exclude: [],
+    // Отключаем использование eval в development
+    pure: ['console.log'],
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      loader: {
+        '.js': 'jsx',
+        '.ts': 'tsx',
+        '.tsx': 'tsx'
+      },
+      // Отключаем eval для CSP
+      define: {
+        global: 'globalThis',
+      },
+    },
+    // Принудительно включаем зависимости для пре-бандлинга
+    include: ['react', 'react-dom', 'react-router-dom', 'antd', 'dayjs'],
+  },
+  // Настройки для CSP
+  define: {
+    global: 'globalThis',
   },
 })

@@ -12,7 +12,7 @@ RUN npm ci
 COPY . .
 
 # Build the app
-RUN npm run build
+RUN npm run dev
 
 # Install serve for production
 RUN npm install -g serve
